@@ -14,7 +14,10 @@ from lxml import html
 import requests
 from pprint import pprint
 import datetime
+import re
+import locale
 
+locale.setlocale(locale.LC_TIME, 'ru_RU.UTF-8')
 
 header = {"user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/605.1.15 (KHTML, like Gecko) "
                         "Version/13.0.3 Safari/605.1.15"}
@@ -38,7 +41,7 @@ def get_news_mail():
         news_list["source"] = "mail.ru"
         news_list["name"] = name_list[news].replace("\xa0", " ")
         news_list["ref"] = ref_list[news]
-        news_list["news_date"] = (datetime.datetime.today()).strftime("%H:%M, %d %m %Y")
+        news_list["news_date"] = (datetime.datetime.today()).strftime("%H:%M, %d %B %Y")
         all_news.append(news_list.copy())
     return
 
@@ -71,13 +74,13 @@ def get_news_yandex():
         '//span[@class="news__item-content"]/text()')
     ref_list = root.xpath(
         '//ol[@class="list news__list"]/li/a/@href | //ol[@class="list news__list news__animation-list"]/li/a/@href')
-    print(len(name_list))
+    # print(len(name_list))
     for news in range(len(name_list)):
         news_list["id_news"] = "y"+(datetime.datetime.today()).strftime("%Y%m%d%H%M")+"-" + str(news)
         news_list["source"] = "yandex.ru"
         news_list["name"] = name_list[news].replace("\xa0", " ")
         news_list["ref"] = main_link_lenta+ref_list[news]
-        news_list["news_date"] = (datetime.datetime.today()).strftime("%H:%M, %d %m %Y")
+        news_list["news_date"] = (datetime.datetime.today()).strftime("%H:%M, %d %B %Y")
         all_news.append(news_list.copy())
     return
 
